@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.Access.Object
 {
-    public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+    public partial class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         internal IDbContext Context;
         internal IDbSet<TEntity> DbSet;

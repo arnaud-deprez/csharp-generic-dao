@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Data.Access.Object
 {
-    public class RepositoyManager : IRepositoryManager
+    public partial class RepositoyManager : IRepositoryManager
     {
         private readonly IDbContext _context;
 

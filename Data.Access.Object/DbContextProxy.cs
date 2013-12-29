@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Data.Access.Object
 {
-    public class DbContextProxy : IDbContext
+    public partial class DbContextProxy : IDbContext
     {
         /// <summary>
         /// Unique identifier per instance
