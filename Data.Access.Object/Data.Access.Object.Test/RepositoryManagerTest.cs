@@ -156,7 +156,14 @@ namespace Data.Access.Object.Test
             Assert.AreEqual(4, _repositoryManager.Repository<Skill>().Query().Count());
             Assert.AreEqual(2, _repositoryManager.Repository<Manager>().Query().Count());
             Assert.AreEqual(5, _repositoryManager.Repository<Employee>().Query().Count());
-            //check the link between employees and skills
+
+            //check company link
+            var companyEnumerator = _repositoryManager.Repository<Company>().Query().Fetch(c => c.Employees).Get().GetEnumerator();
+            Assert.IsTrue(companyEnumerator.MoveNext());
+            var company = companyEnumerator.Current;
+            Assert.AreEqual(5, company.Employees.Count);
+            //only primitive types for where condition...
+            Assert.AreEqual(5, _repositoryManager.Repository<Employee>().Query().Where(e => e.CompanyId == company.Id).Count());
         }
     }
 }
