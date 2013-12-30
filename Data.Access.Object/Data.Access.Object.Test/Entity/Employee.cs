@@ -10,9 +10,14 @@ namespace Data.Access.Object.Test.Entity
 {
     public partial class Employee
     {
+        public Employee()
+        {
+            Skills = new HashSet<Skill>();
+        }
+        
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public long Id { get; set; }
 
         [Required]
         public string LastName { get; set; }
@@ -20,19 +25,18 @@ namespace Data.Access.Object.Test.Entity
         public string Firstname { get; set; }
         [EmailAddress(ErrorMessage = "The email address is not correct")]
         public string Email { get; set; }
-        [RegularExpression("+\\d{2,}", ErrorMessage = "The Phone Number is not valid !")]
+        [Phone(ErrorMessage = "The Phone Number is not valid !")]
         public string PhoneNumber { get; set; }
 
         #region Foreign Keys
 
-        [ForeignKey("Manager")]
-        public Guid ManagerId { get; set; }
-        public Manager Manager { get; set; }
-        [ForeignKey("Company")]
+        public long? ManagerId { get; set; }
+        [ForeignKey("ManagerId")]
+        public virtual Manager Boss { get; set; }
         public Nullable<long> CompanyId { get; set; }
-        public Company Company { get; set; }
-        public ICollection<EmployeeSkill> EmployeeSkills { get; set; }
-        public ICollection<Skill> Skills { get; set; }
+        [ForeignKey("CompanyId")]
+        public virtual Company Company { get; set; }
+        public virtual ICollection<Skill> Skills { get; set; }
 
         #endregion
     }

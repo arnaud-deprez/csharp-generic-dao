@@ -10,17 +10,22 @@ namespace Data.Access.Object.Test.Entity
 {
     public partial class Skill
     {
+        public Skill()
+        {
+            Employees = new HashSet<Employee>();
+        }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
+        public long Id { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
 
         #region Foreign Keys
 
-        public ICollection<EmployeeSkill> EmployeeSkills { get; set; }
-        public ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
+
         #endregion
     }
 }

@@ -26,7 +26,6 @@ namespace Data.Access.Object.Test
 
             //Create company
             _repositoryManager.Repository<Company>().Insert(company);
-            _repositoryManager.Save();
 
             #endregion
 
@@ -74,10 +73,6 @@ namespace Data.Access.Object.Test
                 PhoneNumber = @"+321234578900",
                 Company = company
             });
-            foreach (var s in skills)
-            {
-                managers[0].Skills.Add(s);
-            }
 
             managers.Add(new Manager
             {
@@ -86,60 +81,15 @@ namespace Data.Access.Object.Test
                 Email = @"jean.michel@mycompany.com",
                 PhoneNumber = @"+32123456789",
                 Company = company,
-                Boss = managers[0]
+                Manager = managers[0]
             });
-            managers[1].Skills.Add(skills[0]);
-
-            foreach (var m in managers)
-            {
-                _repositoryManager.Repository<Manager>().Insert(m);
-            }
 
             #endregion
 
             #region Create Employees
-
-            var employees = new List<Employee>();
-
-            employees.Add(new Employee
-            {
-                Firstname = "Poco",
-                LastName = "Developer",
-                Email = @"poco.developer@mycompany.com",
-                Company = company,
-                Boss = managers[1]
-            });
-            employees[0].Skills.Add(skills[1]);
-
-            employees.Add(new Employee
-            {
-                Firstname = "Functional",
-                LastName = "Developer",
-                Email = @"functional.developer@mycompany.com",
-                Company = company,
-                Boss = managers[1]
-            });
-            employees[1].Skills.Add(skills[2]);
-
-            employees.Add(new Employee
-            {
-                Firstname = "Web",
-                LastName = "Developer",
-                Email = @"web.developer@mycompany.com",
-                Company = company,
-                Boss = managers[1]
-            });
-            employees[2].Skills.Add(skills[3]);
-
-            foreach (var e in employees)
-            {
-                _repositoryManager.Repository<Employee>().Insert(e);
-            }
             
             #endregion
 
-            //commit
-            _repositoryManager.Save();
         }
 
         [TestCleanup]
@@ -150,13 +100,15 @@ namespace Data.Access.Object.Test
         }
         
         [TestMethod]
-        public void CheckDbDatas()
+        public void TestMethod1()
         {
+            _repositoryManager.Repository<Company>().Insert(new Company()
+            {
+                Name = "Watchup"
+            });
+            _repositoryManager.Save();
+
             Assert.AreEqual(1, _repositoryManager.Repository<Company>().Query().Count());
-            Assert.AreEqual(4, _repositoryManager.Repository<Skill>().Query().Count());
-            Assert.AreEqual(2, _repositoryManager.Repository<Manager>().Query().Count());
-            Assert.AreEqual(5, _repositoryManager.Repository<Employee>().Query().Count());
-            //check the link between employees and skills
         }
     }
 }

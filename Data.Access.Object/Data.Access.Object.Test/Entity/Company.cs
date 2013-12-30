@@ -10,12 +10,17 @@ namespace Data.Access.Object.Test.Entity
 {
     public partial class Company
     {
+        public Company()
+        {
+            Employees = new HashSet<Employee>();
+        }
+        
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long Id { get; set; }
 
         public string Name { get; set; }
 
-        public ICollection<Employee> Employees { get; set; }
+        public virtual ICollection<Employee> Employees { get; set; }
     }
 }

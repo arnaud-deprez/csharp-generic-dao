@@ -15,7 +15,6 @@ namespace Data.Access.Object.Test.Context
 
         public IDbSet<Company> Companies { get; set; }
         public IDbSet<Employee> Employees { get; set; }
-        public IDbSet<EmployeeSkill> EmployeeSkills { get; set; }
         public IDbSet<Manager> Managers { get; set; }
         public IDbSet<Skill> Skills { get; set; }
 
@@ -50,5 +49,21 @@ namespace Data.Access.Object.Test.Context
         }
 
         #endregion
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //add constraint for many to many project
+            modelBuilder.Entity<Employee>()
+                .HasMany<Skill>(e => e.Skills)
+                .WithMany()
+                .Map(x =>
+                {
+                    x.ToTable("EmployeeSkill");
+                    x.MapLeftKey("EmployeeId");
+                    x.MapRightKey("SkillId");
+                });
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
