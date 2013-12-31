@@ -30,8 +30,8 @@ namespace Data.Access.Object.Test.Entity
 
         #region Foreign Keys
 
-        public long? ManagerId { get; set; }
-        [ForeignKey("ManagerId")]
+        public Nullable<long> BossId { get; set; }
+        [ForeignKey("BossId")]
         public virtual Manager Boss { get; set; }
         public Nullable<long> CompanyId { get; set; }
         [ForeignKey("CompanyId")]
