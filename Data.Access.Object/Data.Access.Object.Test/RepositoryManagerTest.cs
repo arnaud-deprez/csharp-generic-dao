@@ -164,6 +164,63 @@ namespace Data.Access.Object.Test
             Assert.AreEqual(5, company.Employees.Count);
             //only primitive types for where condition...
             Assert.AreEqual(5, _repositoryManager.Repository<Employee>().Query().Where(e => e.CompanyId == company.Id).Count());
+
+            //Check Employee links
+            var employeeEnumerator = _repositoryManager.Repository<Employee>().Query().Where(e => e.Company.Id == company.Id).Get().GetEnumerator();
+            while (employeeEnumerator.MoveNext())
+            {
+                Assert.IsNotNull(employeeEnumerator.Current.Skills);
+                Assert.IsTrue(employeeEnumerator.Current.Skills.Count > 0);
+                if (employeeEnumerator.Current.Firstname.Equals("Arnaud"))
+                {
+                    Assert.IsFalse(employeeEnumerator.Current.BossId.HasValue);
+                    Assert.IsNull(employeeEnumerator.Current.Boss);
+                    Assert.IsNotNull(employeeEnumerator.Current.Skills);
+                    Assert.AreEqual(4, employeeEnumerator.Current.Skills.Count);
+                    Assert.IsInstanceOfType(employeeEnumerator.Current, typeof(Manager));
+                    Assert.IsNotNull(((Manager)employeeEnumerator.Current).Employees);
+                    Assert.AreEqual(1, ((Manager)employeeEnumerator.Current).Employees.Count);
+                }
+                else
+                {
+                    Assert.IsTrue(employeeEnumerator.Current.BossId.HasValue);
+                    Assert.IsNotNull(employeeEnumerator.Current.Boss);
+                    Assert.IsNotNull(employeeEnumerator.Current.Skills);
+                    Assert.AreEqual(1, employeeEnumerator.Current.Skills.Count);
+                    if (employeeEnumerator.Current.Firstname.Equals("Jean"))
+                    {
+                        Assert.IsInstanceOfType(employeeEnumerator.Current, typeof(Manager));
+                        Assert.IsNotNull(((Manager)employeeEnumerator.Current).Employees);
+                        Assert.AreEqual(3, ((Manager)employeeEnumerator.Current).Employees.Count);
+                    }
+                }
+            }
+
+            //Check Manager links
+            var managerEnumerator = _repositoryManager.Repository<Manager>().Query().Where(m => m.Company.Id == company.Id).Get().GetEnumerator();
+            while (managerEnumerator.MoveNext())
+            {
+                Assert.IsNotNull(managerEnumerator.Current.Skills);
+                Assert.IsTrue(managerEnumerator.Current.Skills.Count > 0);
+                if (managerEnumerator.Current.Firstname.Equals("Arnaud"))
+                {
+                    Assert.IsFalse(managerEnumerator.Current.BossId.HasValue);
+                    Assert.IsNull(managerEnumerator.Current.Boss);
+                    Assert.IsNotNull(managerEnumerator.Current.Skills);
+                    Assert.AreEqual(4, managerEnumerator.Current.Skills.Count);
+                    Assert.IsNotNull(managerEnumerator.Current.Employees);
+                    Assert.AreEqual(1, managerEnumerator.Current.Employees.Count);
+                }
+                else
+                {
+                    Assert.IsTrue(managerEnumerator.Current.BossId.HasValue);
+                    Assert.IsNotNull(managerEnumerator.Current.Boss);
+                    Assert.IsNotNull(managerEnumerator.Current.Skills);
+                    Assert.AreEqual(1, managerEnumerator.Current.Skills.Count);
+                    Assert.IsNotNull(managerEnumerator.Current.Employees);
+                    Assert.AreEqual(3, managerEnumerator.Current.Employees.Count);
+                }
+            }
         }
     }
 }
