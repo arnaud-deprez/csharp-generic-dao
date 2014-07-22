@@ -25,7 +25,7 @@ namespace Data.Access.Object
 
         #endregion
 
-        public QueryBuilder(Repository<TEntity> repository)
+        internal QueryBuilder(Repository<TEntity> repository)
         {
             _repository = repository;
             _fetchProperties = new List<Expression<Func<TEntity, object>>>();
